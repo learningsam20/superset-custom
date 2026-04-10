@@ -18,25 +18,25 @@
 ######################################################################
 # Node stage to deal with static asset construction
 ######################################################################
-ARG PY_VER=3.11.14-slim-trixie
 
 # If BUILDPLATFORM is null, set it to 'amd64' (or leave as is otherwise).
 ARG BUILDPLATFORM=${BUILDPLATFORM:-amd64}
 
 # Include translations in the final build
 ARG BUILD_TRANSLATIONS="false"
+ARG PY_VER=3.13.13-slim-trixie
 
 ######################################################################
 # superset-node-ci used as a base for building frontend assets and CI
 ######################################################################
-FROM --platform=${BUILDPLATFORM} node:20-trixie-slim AS superset-node-ci
+FROM --platform=${BUILDPLATFORM} node:22-trixie-slim AS superset-node-ci
 ARG BUILD_TRANSLATIONS
 ENV BUILD_TRANSLATIONS=${BUILD_TRANSLATIONS}
 ARG DEV_MODE="false"           # Skip frontend build in dev mode
 ENV DEV_MODE=${DEV_MODE}
 
 COPY docker/ /app/docker/
-# Arguments for build configuration
+# Arguments for build configuration`    
 ARG NPM_BUILD_CMD="build"
 
 # Install system dependencies required for node-gyp
@@ -100,6 +100,7 @@ RUN if [ "${BUILD_TRANSLATIONS}" = "true" ]; then \
 ######################################################################
 # Base python layer
 ######################################################################
+#FROM dhi.io/python/debian-12/3 AS python-base
 FROM python:${PY_VER} AS python-base
 
 ARG SUPERSET_HOME="/app/superset_home"
@@ -113,7 +114,7 @@ RUN useradd --user-group -d ${SUPERSET_HOME} -m --no-log-init --shell /bin/bash 
 # Some bash scripts needed throughout the layers
 COPY --chmod=755 docker/*.sh /app/docker/
 
-RUN pip install --no-cache-dir --upgrade uv
+RUN pip install --no-cache-dir --upgrade uv --break-system-packages
 
 # Using uv as it's faster/simpler than pip
 RUN uv venv /app/.venv
