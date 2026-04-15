@@ -378,7 +378,7 @@ functioning across environments.
 Make sure your machine meets the [OS dependencies](https://superset.apache.org/docs/installation/pypi#os-dependencies) before following these steps.
 You also need to install MySQL.
 
-Ensure that you are using Python version 3.9, 3.10 or 3.11, then proceed with:
+Ensure that you are using Python version 3.10, 3.11, 3.12, or 3.13, then proceed with:
 
 ```bash
 # Create a virtual environment and activate it (recommended)

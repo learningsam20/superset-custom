@@ -1,5 +1,6 @@
 # Keep this in sync with the base image in the main Dockerfile (ARG PY_VER)
-FROM python:3.11.13-trixie AS base
+# Python base image version must be 3.13.13 or above.
+FROM python:3.13.13-slim-trixie AS base
 
 # Install system dependencies that Superset needs
 # This layer will be cached across Codespace sessions

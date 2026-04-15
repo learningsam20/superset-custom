@@ -20,16 +20,20 @@
 ######################################################################
 
 # If BUILDPLATFORM is null, set it to 'amd64' (or leave as is otherwise).
-ARG BUILDPLATFORM=${BUILDPLATFORM:-amd64}
+#ARG BUILDPLATFORM=${BUILDPLATFORM:-amd64}
+ARG BUILDPLATFORM
+ARG TARGETPLATFORM
 
 # Include translations in the final build
 ARG BUILD_TRANSLATIONS="false"
+# Python base image version must be 3.13.13 or above.
+# The default points to 3.13.13 for compatibility with project requirements.
 ARG PY_VER=3.13.13-slim-trixie
 
 ######################################################################
 # superset-node-ci used as a base for building frontend assets and CI
 ######################################################################
-FROM --platform=${BUILDPLATFORM} node:22-trixie-slim AS superset-node-ci
+FROM --platform=$TARGETPLATFORM node:22-trixie-slim AS superset-node-ci
 ARG BUILD_TRANSLATIONS
 ENV BUILD_TRANSLATIONS=${BUILD_TRANSLATIONS}
 ARG DEV_MODE="false"           # Skip frontend build in dev mode
@@ -101,7 +105,7 @@ RUN if [ "${BUILD_TRANSLATIONS}" = "true" ]; then \
 # Base python layer
 ######################################################################
 #FROM dhi.io/python/debian-12/3 AS python-base
-FROM python:${PY_VER} AS python-base
+FROM --platform=$TARGETPLATFORM python:${PY_VER} AS python-base
 
 ARG SUPERSET_HOME="/app/superset_home"
 ENV SUPERSET_HOME=${SUPERSET_HOME}
