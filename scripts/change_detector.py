@@ -109,6 +109,8 @@ def is_int(s: str) -> bool:
 
 def main(event_type: str, sha: str, repo: str) -> None:
     """Main function to check for file changes based on event context."""
+def main(event_type: str, sha: str, repo: str) -> None:
+    """Main function to check for file changes based on event context."""
     print("SHA:", sha)
     print("EVENT_TYPE", event_type)
     files = []
@@ -126,6 +128,9 @@ def main(event_type: str, sha: str, repo: str) -> None:
 
     elif event_type == "workflow_dispatch":
         print("Workflow dispatched, assuming all changed")
+
+    elif event_type == "schedule":
+        print("Scheduled workflow run, assuming all changed")
 
     else:
         raise ValueError("Unsupported event type")
